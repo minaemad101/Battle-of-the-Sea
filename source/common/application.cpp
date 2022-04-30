@@ -22,7 +22,7 @@
 #define ENABLE_OPENGL_DEBUG_MESSAGES
 #endif
 
-#include "texture/screenshot.h"
+#include "texture/screenshot.hpp"
 
 std::string default_screenshot_filepath() {
     std::stringstream stream;
@@ -178,10 +178,10 @@ int our::Application::run(int run_for_frames) {
     gladLoadGL(glfwGetProcAddress);         // Load the OpenGL functions from the driver
 
     // Print information about the OpenGL context
-    std::cout << "VENDOR          : " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "RENDERER        : " << glGetString(GL_RENDERER) << std::endl;
-    std::cout << "VERSION         : " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL VERSION    : " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+    //std::cout << "VENDOR          : " << glGetString(GL_VENDOR) << std::endl;
+    //std::cout << "RENDERER        : " << glGetString(GL_RENDERER) << std::endl;
+    //std::cout << "VERSION         : " << glGetString(GL_VERSION) << std::endl;
+    //std::cout << "GLSL VERSION    : " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
 #if defined(ENABLE_OPENGL_DEBUG_MESSAGES)
     // if we have OpenGL debug messages enabled, set the message callback
