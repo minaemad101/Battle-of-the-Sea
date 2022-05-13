@@ -18,11 +18,16 @@ namespace our {
             skyShader->attach("assets/shaders/textured.vert", GL_VERTEX_SHADER);
             skyShader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
             skyShader->link();
-            
+            //not done
             //TODO: (Req 9) Pick the correct pipeline state to draw the sky
             // Hints: the sky will be draw after the opaque objects so we would need depth testing but which depth funtion should we pick?
             // We will draw the sphere from the inside, so what options should we pick for the face culling.
             PipelineState skyPipelineState{};
+            //i am not sure for function depth and function faceCulling dafult
+            skyPipelineState.depthTesting.enabled=true;
+            skyPipelineState.depthTesting.function=GL_LESS;
+            skyPipelineState.faceCulling.enabled=true;
+            skyPipelineState.faceCulling.culledFace=GL_FRONT;
             
             // Load the sky texture (note that we don't need mipmaps since we want to avoid any unnecessary blurring while rendering the sky)
             std::string skyTextureFile = config.value<std::string>("sky", "");
@@ -47,15 +52,32 @@ namespace our {
         }
 
         // Then we check if there is a postprocessing shader in the configuration
+        
         if(config.contains("postprocess")){
             //TODO: (Req 10) Create a framebuffer
+            glGenFramebuffers(1, &postprocessFrameBuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer);
+            //maybe change GL_DRAW_FRAMEBUFFER slide 80 texure
 
             //TODO: (Req 10) Create a color and a depth texture and attach them to the framebuffer
             // Hints: The color format can be (Red, Green, Blue and Alpha components with 8 bits for each channel).
             // The depth format can be (Depth component with 24 bits).
+            GLuint colored;
+            glGenTextures(1, &colored );
+            glBindTexture(GL_TEXTURE_2D, colored);
+            GLuint mip_levels = glm::floor(glm::log2(glm::max<float>(windowSize[0], windowSize[1]))) + 1;
+            glTexStorage2D(GL_TEXTURE_2D, mip_levels, GL_RGBA8, windowSize[0], windowSize[1]);
+            //create depth
             
+            GLuint dbs;
+            glGenTextures(1, &dbs);
+            glBindTexture(GL_TEXTURE_2D, dbs);
+            glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT32, windowSize[0], windowSize[1]);
+            glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colored, 0);   
+            glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, dbs, 0);
+
             //TODO: (Req 10) Unbind the framebuffer just to be safe
-            
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             // Create a vertex array to use for drawing the texture
             glGenVertexArrays(1, &postProcessVertexArray);
 
@@ -132,46 +154,62 @@ namespace our {
 
         // If there is no camera, we return (we cannot render without a camera)
         if(camera == nullptr) return;
-
+        
         //TODO: (Req 8) Modify the following line such that "cameraForward" contains a vector pointing the camera forward direction
         // HINT: See how you wrote the CameraComponent::getViewMatrix, it should help you solve this one
-        glm::vec3 cameraForward = glm::vec3(0.0, 0.0, 0.0);
+        glm::vec3 cameraForward = camera->getViewMatrix()[2];
         std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand& first, const RenderCommand& second){
             //TODO: (Req 8) Finish this function
             // HINT: the following return should return true "first" should be drawn before "second". 
-            return false;
+            
+        return first.center[2] < second.center[2]; 
+        
+
         });
 
         //TODO: (Req 8) Get the camera ViewProjection matrix and store it in VP
-        glm::mat4 VP = glm::mat4(1.0f);
+        glm::mat4 VP =camera->getProjectionMatrix(windowSize) * camera->getViewMatrix();
         //TODO: (Req 8) Set the OpenGL viewport using windowSize
+        glViewport(0,  0, windowSize[0], windowSize[1]);
 
         //TODO: (Req 8) Set the clear color to black and the clear depth to 1
-        
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearDepth(1.0f);
         //TODO: (Req 8) Set the color mask to true and the depth mask to true (to ensure the glClear will affect the framebuffer)
+        glColorMask(true, true, true, true);
+        glDepthMask(true);
         
 
         // If there is a postprocess material, bind the framebuffer
         if(postprocessMaterial){
             //TODO: (Req 10) bind the framebuffer
-
+           glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer);
         }
 
         //TODO: (Req 8) Clear the color and depth buffers
-        
+         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //TODO: (Req 8) Draw all the opaque commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
-        
+        for(int i=0;i< opaqueCommands.size();i++ ){
+        our::Material* material = opaqueCommands[i].material;
+            material->setup();
+            material->shader->set("transform", VP * opaqueCommands[i].localToWorld);
+            opaqueCommands[i].mesh->draw();
+        }
+
         // If there is a sky material, draw the sky
-        if(this->skyMaterial){
+if(this->skyMaterial){
             //TODO: (Req 9) setup the sky material
-            
+            this->skyMaterial->setup();
             //TODO: (Req 9) Get the camera position
-
-            //TODO: (Req 9) Create a model matrix for the sy such that it always follows the camera (sky sphere center = camera position)
-
+            glm::vec3 cameraposition = glm::vec4(camera->getOwner()->localTransform.position,1.0) * camera->getOwner()->getLocalToWorldMatrix();
+            //TODO: (Req 9) Create a model matrix for the sky such that it always follows the camera (sky sphere center = camera position)
+            glm::mat4 mat = glm::translate(glm::mat4(1), cameraposition);
+            glm::mat4 mat1 = glm::scale(mat ,glm::vec3(camera->far) );
+            glm::mat4 model=mat1;
             //TODO: (Req 9) We want the sky to be drawn behind everything (in NDC space, z=1)
             // We can acheive the is by multiplying by an extra matrix after the projection but what values should we put in it?
+
             glm::mat4 alwaysBehindTransform = glm::mat4(
             //  Row1, Row2, Row3, Row4
                 1.0f, 0.0f, 0.0f, 0.0f, // Column1
@@ -180,17 +218,28 @@ namespace our {
                 0.0f, 0.0f, 0.0f, 1.0f  // Column4
             );
             //TODO: (Req 9) set the "transform" uniform
-            
+           this->skyMaterial->shader->set("transform", camera->getProjectionMatrix(windowSize)  *model);
             //TODO: (Req 9) draw the sky sphere
+            this->skySphere->draw();
+
+            
             
         }
         //TODO: (Req 8) Draw all the transparent commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
         
+        for(int i=0;i< transparentCommands.size();i++ ){
+        our::Material* material = transparentCommands[i].material;
+        
+            material->setup();
+            material->shader->set("transform", VP * transparentCommands[i].localToWorld);
+            transparentCommands[i].mesh->draw();
+        }
 
         // If there is a postprocess material, apply postprocessing
         if(postprocessMaterial){
             //TODO: (Req 10) Return to the default framebuffer
+            
             
             //TODO: (Req 10) Setup the postprocess material and draw the fullscreen triangle
             
