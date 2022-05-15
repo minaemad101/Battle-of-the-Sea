@@ -42,6 +42,8 @@ namespace our {
         // For example, if faceCulling.enabled is true, you should call glEnable(GL_CULL_FACE), otherwise, you should call glDisable(GL_CULL_FACE)
         void setup() const {
             //TODO: (Req 3) Write this function
+
+            //if the blending is enabled then set the blending equation, the function, and the color else disable blending
             if(blending.enabled){
                 glEnable(GL_BLEND);
                 glBlendEquation(blending.equation);
@@ -52,6 +54,7 @@ namespace our {
                 glDisable(GL_BLEND);
             }
 
+            //if face culling is enabled set the face to cull and the direction of the front face else disable faceculling
             if(faceCulling.enabled){
                 glEnable(GL_CULL_FACE);
                 glCullFace(faceCulling.culledFace);
@@ -61,6 +64,7 @@ namespace our {
                 glDisable(GL_CULL_FACE);
             }
 
+            //if depth testing is enabled then set the depth testing function and the mask and the color to mask
             if(depthTesting.enabled){
                 glEnable(GL_DEPTH_TEST);
                 glDepthFunc(depthTesting.function);
