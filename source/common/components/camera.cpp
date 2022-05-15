@@ -38,7 +38,7 @@ namespace our {
         glm::vec4 eye = glm::vec4(0, 0, 0,1);
           glm::vec4 center = glm::vec4(0, 0, -1,1);
            glm::vec4 up = glm::vec4(0, 1, 0,1);
-
+// transform from camera space to world space by mul bu M
            glm::vec3 eyeMat=  M*eye;
            glm::vec3 centerMat=  M*center;
            glm::vec3 upMat=  M*up;
@@ -59,7 +59,9 @@ namespace our {
         // It takes left, right, bottom, top. Bottom is -orthoHeight/2 and Top is orthoHeight/2.
         // Left and Right are the same but after being multiplied by the aspect ratio
         // For the perspective camera, you can use glm::perspective
-           float aspect_ratio = static_cast<float>(viewportSize.x) / viewportSize.y;     
+           
+        float aspect_ratio = static_cast<float>(viewportSize.x) / viewportSize.y;     
+        // pasing the parameters to the function  orthoprojection , perspectiveprojection
         glm::mat4 orthoprojection = glm::ortho(-(orthoHeight / 2) * aspect_ratio, (orthoHeight / 2) * aspect_ratio, -orthoHeight/2, orthoHeight/2, near, far);
          glm::mat4 perspectiveprojection = glm::perspective(
             fovY,
@@ -67,7 +69,7 @@ namespace our {
             near,
             far
         );
-
+//select one of the 2 projections according to camera type
       if(cameraType == CameraType::ORTHOGRAPHIC){
             return orthoprojection;
         } else {

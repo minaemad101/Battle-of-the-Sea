@@ -24,9 +24,12 @@ namespace our {
             // We will draw the sphere from the inside, so what options should we pick for the face culling.
             
             PipelineState skyPipelineState{};
+            // enable the depthTesting of skyPipelineState
             skyPipelineState.depthTesting.enabled=true;
             skyPipelineState.depthTesting.function=GL_LEQUAL;
+            // enable the faceCulling of skyPipelineState
             skyPipelineState.faceCulling.enabled=true;
+             // to be drawn from inside , cullface = front
             skyPipelineState.faceCulling.culledFace=GL_FRONT;
             
             // Load the sky texture (note that we don't need mipmaps since we want to avoid any unnecessary blurring while rendering the sky)
@@ -81,6 +84,7 @@ namespace our {
             // glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, dbs, 0);
 
             //TODO: (Req 10) Unbind the framebuffer just to be safe
+            // to unbind pass 0 to  glBindFramebuffer
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             // Create a vertex array to use for drawing the texture
             glGenVertexArrays(1, &postProcessVertexArray);
@@ -249,6 +253,7 @@ if(this->skyMaterial){
             //TODO: (Req 10) Setup the postprocess material and draw the fullscreen triangle
             glBindVertexArray(postProcessVertexArray);
             postprocessMaterial->setup();
+            //draw the fullscreen triangle
             glDrawArrays(GL_TRIANGLES,0,3);
         }
     }

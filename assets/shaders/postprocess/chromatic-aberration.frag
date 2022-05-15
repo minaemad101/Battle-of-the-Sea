@@ -21,6 +21,7 @@ void main(){
     // To get the red channel, we move by amount STRENGTH to the left then sample another pixel from which we take the red channel
     // To get the blue channel, we move by amount STRENGTH to the right then sample another pixel from which we take the blue channel
     vec3 colr;
+     // need to shift only red and blue color , green need not be shifted
     colr.r = texture(tex,vec2(tex_coord.x - STRENGTH,tex_coord.y)).r;
     colr.g = texture(tex,vec2(tex_coord.x,tex_coord.y)).g;
     colr.b = texture(tex,vec2(tex_coord.x + STRENGTH,tex_coord.y)).b;
