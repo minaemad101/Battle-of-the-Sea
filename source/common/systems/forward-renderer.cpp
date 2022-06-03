@@ -158,6 +158,10 @@ namespace our {
                     opaqueCommands.push_back(command);
                 }
             }
+                        //! LIGHT
+            if(auto lightRenderer = entity->getComponent<LightComponent>(); lightRenderer){
+                    lights.push_back(lightRenderer);
+                }
         }
 
         // If there is no camera, we return (we cannot render without a camera)
@@ -181,7 +185,7 @@ namespace our {
         glViewport(0,  0, windowSize[0], windowSize[1]);
 
         //TODO: (Req 8) Set the clear color to black and the clear depth to 1
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClearDepth(1.0f);
         //TODO: (Req 8) Set the color mask to true and the depth mask to true (to ensure the glClear will affect the framebuffer)
         glColorMask(true, true, true, true);
@@ -199,11 +203,50 @@ namespace our {
         //TODO: (Req 8) Draw all the opaque commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
         for(int i=0;i< opaqueCommands.size();i++ ){
-        our::Material* material = opaqueCommands[i].material;
+
+            our::Material* material = opaqueCommands[i].material;
             material->setup();
             material->shader->set("transform", VP * opaqueCommands[i].localToWorld);
+            //! LIGHT
+
+            material->shader->set("light_count",int(lights.size()));
+            std::string uni ="";
+            for(int j=0;j< lights.size();j++){
+                uni = "lights["+std::to_string(j)+"].type";
+                material->shader->set(uni,lights[j]->lightType);
+                uni = "lights["+std::to_string(j)+"].position";
+                material->shader->set(uni,glm::vec3(lights[j]->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1)));
+                uni = "lights["+std::to_string(j)+"].direction";
+                material->shader->set(uni,glm::vec3(lights[j]->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,-1,0,0)));
+                uni = "lights["+std::to_string(j)+"].diffuse";
+                material->shader->set(uni,lights[j]->diffuse);
+                uni = "lights["+std::to_string(j)+"].specular";
+                material->shader->set(uni,lights[j]->specular);
+                uni = "lights["+std::to_string(j)+"].attenuation";
+                material->shader->set(uni,lights[j]->attenuation);
+                uni = "lights["+std::to_string(j)+"].cone_angles";
+                material->shader->set(uni,glm::vec2(glm::radians(lights[j]->cone_angles.x), glm::radians(lights[j]->cone_angles.y)));
+                uni = "lights["+std::to_string(j)+"].ambient";
+                material->shader->set(uni,lights[j]->ambient);           
+
+            glm::vec4 eye = camera->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1);
+            glm::mat4 M = opaqueCommands[i].localToWorld;
+            glm::mat4 M_I = glm::inverse(M);
+            glm::mat4 M_IT = glm::transpose(M_I);
+            
+
+
+            material->shader->set("eye", glm::vec3(eye.x,eye.y,eye.z));
+            material->shader->set("VP", VP);
+            material->shader->set("M", M);
+            material->shader->set("M_I", M_I);
+            material->shader->set("M_IT", M_IT);
+            }
+
+
             opaqueCommands[i].mesh->draw();
         }
+
 
         // If there is a sky material, draw the sky
 if(this->skyMaterial){
@@ -242,8 +285,44 @@ if(this->skyMaterial){
         
             material->setup();
             material->shader->set("transform", VP * transparentCommands[i].localToWorld);
+            //! LIGHT
+            glm::vec3 eye =camera->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1);
+            glm::mat4 M = transparentCommands[i].localToWorld;
+            glm::mat4 M_I = glm::inverse(M);
+            glm::mat4 M_IT = glm::transpose(M_I);
+            
+
+
+            material->shader->set("eye", eye);
+            material->shader->set("VP", VP);
+            material->shader->set("M", M);
+            material->shader->set("M_I", M_I);
+            material->shader->set("M_IT", M_IT);
+            material->shader->set("light_count",int(lights.size()));
+            std::string uni ="";
+
+            for(int j=0;j< lights.size();j++){
+                
+                uni = "lights["+std::to_string(j)+"].type";
+                material->shader->set(uni,lights[j]->lightType);
+                uni = "lights["+std::to_string(j)+"].position";
+                material->shader->set(uni,glm::vec4(0,0,0,0)*lights[j]->getOwner()->getLocalToWorldMatrix());
+                uni = "lights["+std::to_string(j)+"].direction";
+                material->shader->set(uni,glm::vec4(0,-1,0,0)*lights[j]->getOwner()->getLocalToWorldMatrix());
+                uni = "lights["+std::to_string(j)+"].diffuse";
+                material->shader->set(uni,lights[j]->diffuse);
+                uni = "lights["+std::to_string(j)+"].specular";
+                material->shader->set(uni,lights[j]->specular);
+                uni = "lights["+std::to_string(j)+"].attenuation";
+                material->shader->set(uni,lights[j]->attenuation);
+                uni = "lights["+std::to_string(j)+"].cone_angles";
+                material->shader->set(uni,lights[j]->cone_angles);
+                uni = "lights["+std::to_string(j)+"].ambient";
+                material->shader->set(uni,lights[j]->ambient);
+            }
             transparentCommands[i].mesh->draw();
         }
+
 
         // If there is a postprocess material, apply postprocessing
         if(postprocessMaterial){

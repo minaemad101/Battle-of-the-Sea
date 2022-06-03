@@ -37,7 +37,7 @@ namespace our {
         // then you can use glm::lookAt
         glm::vec4 eye = glm::vec4(0, 0, 0,1);
           glm::vec4 center = glm::vec4(0, 0, -1,1);
-           glm::vec4 up = glm::vec4(0, 1, 0,1);
+           glm::vec4 up = glm::vec4(0, 1, 0,0);
 // transform from camera space to world space by mul bu M
            glm::vec3 eyeMat=  M*eye;
            glm::vec3 centerMat=  M*center;

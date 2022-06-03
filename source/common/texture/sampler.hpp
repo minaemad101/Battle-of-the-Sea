@@ -11,9 +11,10 @@ namespace our
     class Sampler
     {
         // The OpenGL object name of this sampler
-        GLuint name;
+      
 
     public:
+        GLuint name;
         // This constructor creates an OpenGL sampler and saves its object name in the member variable "name"
         Sampler()
         {
@@ -34,6 +35,7 @@ namespace our
             // TODO: (Req 5) Complete this function
             glBindSampler(textureUnit, name); //texture unit is the index of the texture unit to which the sampler is bound
         }
+
 
         // This static method ensures that no sampler is bound to the given texture unit
         static void unbind(GLuint textureUnit)

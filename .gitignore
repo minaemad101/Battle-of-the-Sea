@@ -23,5 +23,9 @@ CMakeSettings.json
 
 # Screenshots
 screenshots/
+
+# Errors
 errors/
-expected/
+
+# imgcmp.exe
+scripts/imgcmp.exe
