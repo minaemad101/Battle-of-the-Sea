@@ -291,6 +291,11 @@
                     {
                         "type": "objmove",
                         "linearVelocity": [5, 0, 0]
+                    },
+                    { 
+                        "type": "Collision Object", 
+                        "position": [0, 0, 0], 
+                        "length": 1
                     }
                 ]
             }
@@ -308,7 +313,13 @@
                     {
                         "type": "Movement",
                         "linearVelocity": [0, 0, 5]
+                    },
+                    { 
+                        "type": "Collision Object", 
+                        "position": [0, 0, 0], 
+                        "length": 1
                     }
+
                 ]
             }
             ,{
@@ -327,6 +338,11 @@
                         "linearVelocity":[0,0,0],
                         "angularVelocity":[0,0,0]
 
+                    },
+                    { 
+                        "type": "Collision Object", 
+                        "position": [0, 0, 0], 
+                        "length": 1
                     }
                 ]
             }
