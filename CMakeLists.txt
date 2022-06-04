@@ -81,6 +81,8 @@ set(COMMON_SOURCES
         source/common/components/movement.cpp
         source/common/components/objmove.cpp
         source/common/components/objmove.hpp
+        source/common/components/collision-object.cpp
+        source/common/components/collision-object.hpp
         source/common/components/component-deserializer.hpp
 
         source/common/systems/forward-renderer.hpp
