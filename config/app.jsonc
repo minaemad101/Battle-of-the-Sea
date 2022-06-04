@@ -183,29 +183,30 @@
         },
         "world":[
             {
-                "position": [10, 5, 10],
+                "position": [-5, 5, 20],
+                "rotation":[-10,0,-10],
                 "components": [
                     {
                         "type": "Camera"
-                    },
-                    {
-                        "type": "Free Camera Controller"
-                    }
-                ],
-                "children": [
-                    {
-                        "position": [1, -1, -1],
-                        "rotation": [45, 45, 0],
-                        "scale": [0.1, 0.1, 1.0],
-                        "components": [
-                            {
-                                "type": "Mesh Renderer",
-                                "mesh": "cube",
-                                "material": "metal"
-                            }
-                        ]
-                    }
-                ]
+                    }]//,
+                    // {
+                    //     "type": "Free Camera Controller"
+                    // }
+                //,
+                // "children": [
+                //     {
+                //         "position": [1, -1, -1],
+                //         "rotation": [45, 45, 0],
+                //         "scale": [0.1, 0.1, 1.0],
+                //         "components": [
+                //             {
+                //                 "type": "Mesh Renderer",
+                //                 "mesh": "cube",
+                //                 "material": "metal"
+                //             }
+                //         ]
+                //     }
+                // ]
             },
             {
                 "rotation": [0, -45, 0],
@@ -218,9 +219,9 @@
                         "material": "boat"
                     },
                     {
-                        "type": "Movement",
-                        "linearVelocity": [0, 0, 0],
-                        "angularVelocity": [0, 45, 0]
+                        "type": "objmove",
+                        "linearVelocity": [0, 0, 1]
+                    
                     }
                 ]
             },

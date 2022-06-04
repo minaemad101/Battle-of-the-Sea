@@ -6,6 +6,7 @@
 #include "free-camera-controller.hpp"
 #include "movement.hpp"
 #include "light.hpp"
+#include "objmove.hpp"
 
 namespace our {
 
@@ -24,7 +25,10 @@ namespace our {
             component = entity->addComponent<MovementComponent>();
         } else if (type == LightComponent::getID()) {//! LIGHT
             component = entity->addComponent<LightComponent>();
+        } else if (type == objmove::getID()) {//! LIGHT
+            component = entity->addComponent<objmove>();
         }
+
         if(component) component->deserialize(data);
     }
 

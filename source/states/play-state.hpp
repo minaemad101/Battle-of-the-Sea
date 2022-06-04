@@ -1,7 +1,7 @@
 #pragma once
 
 #include <application.hpp>
-
+#include "../source/common/systems/objsys.hpp"
 #include <ecs/world.hpp>
 #include <systems/forward-renderer.hpp>
 #include <systems/free-camera-controller.hpp>
@@ -17,6 +17,8 @@ class Playstate: public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    our::objsys objsystem;
+
     // our::CarMovementSystem carMovementSystem;
     // our::DeliverSystem deliverSystem;
 
@@ -33,13 +35,14 @@ class Playstate: public our::State {
         }
         // We initialize the camera controller system since it needs a pointer to the app
         cameraController.enter(getApp());
-        // // We initialize the car movement system since it needs a pointer to the app
-        // carMovementSystem.enter(getApp());
-        // // We initialize the deliver system since it needs a pointer to the app
-        // deliverSystem.enter(getApp());
         // Then we initialize the renderer
+            objsystem.enter(getApp());
+        
+
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
+  
+        
     }
 
     void onDraw(double deltaTime) override {
@@ -49,7 +52,10 @@ class Playstate: public our::State {
         // carMovementSystem.update(&world,(float)deltaTime);
         // deliverSystem.update(&world,(float)deltaTime);
         // And finally we use the renderer system to draw the scene
+        
+        objsystem.update(&world, (float)deltaTime);
         renderer.render(&world);
+        
     }
 
     void onDestroy() override {
