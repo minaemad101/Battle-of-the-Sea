@@ -6,7 +6,7 @@
 #include <systems/movement.hpp>
 #include <asset-loader.hpp>
 
-class Menustate : public our::State
+class Gameoverstate : public our::State
 {
     our::World world;
     our::ForwardRenderer renderer;
@@ -23,13 +23,12 @@ class Menustate : public our::State
 
             
 
-        if (config.contains("menu"))
-            world.deserialize(config["menu"]);            
+        if (config.contains("gameover"))
+            world.deserialize(config["gameover"]);            
 
         cameraController.enter(getApp());
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
-        menuSystem.enter(getApp());
     }
 
     void onDraw(double deltaTime) override
@@ -37,15 +36,8 @@ class Menustate : public our::State
 
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
-        // And finally we use the renderer system to draw the scene
         renderer.render(&world);
 
-        //renderer.render(&world);
-
-        // if (menuSystem.update(&world, (float)deltaTime))
-        // {
-        //     getApp()->changeState("game");
-        // }
     }
 
     void onDestroy() override

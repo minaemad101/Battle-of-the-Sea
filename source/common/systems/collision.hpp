@@ -51,6 +51,8 @@ namespace our
                 int randNum = rand() % (41) - 20;
                 enemy->getOwner()->localTransform.position.z = -10;
                 enemy->getOwner()->localTransform.position.x = randNum;
+                randNum = rand() % (20) + 5;
+                enemy->linearVelocity.z=randNum;
                 missle->getOwner()->localTransform.position = boat->getOwner()->localTransform.position;
                 misstat = 0;
                 missle->linearVelocity.z = 0;

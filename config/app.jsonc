@@ -1,15 +1,14 @@
 {
     "start-scene": "menu",
-    "window":
-    {
-        "title":"Battle of the sea",
-        "size":{
-            "width":1280,
-            "height":720
+    "window": {
+        "title": "FARBEN",
+        "size": {
+        "width": 1600,
+        "height": 900
         },
         "fullscreen": false
     },
-    "game": {
+    "scene": {
         "renderer":{
             "sky": "assets/textures/sky.jpg",
             "postprocess": "assets/shaders/postprocess/vignette.frag"
@@ -34,11 +33,11 @@
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
                 "glass": "assets/textures/glass-panels.png",
-                "sea":"assets/textures/sea.png",
+                "sea": "assets/textures/sea.png",
                 
                 "black":"assets/textures/black.png",
                 "white":"assets/textures/white.png",
-
+    
                 "boat":"assets/textures/boat.png",
                 "missle":"assets/textures/missle.png",
                 
@@ -47,7 +46,8 @@
                 "specular": "assets/textures/monkey/specular.jpg",
                 "roughness": "assets/textures/monkey/roughness.jpg",
                 "ambient_occlusion": "assets/textures/monkey/ambient_occlusion.jpg",
-                "emissive": "assets/textures/monkey/emissive.jpg"
+                "emissive": "assets/textures/monkey/emissive.jpg",
+                "text":"assets/textures/menu-state.jpg"
             },
             "meshes":{
                 "cube": "assets/models/cube.obj",
@@ -64,6 +64,21 @@
                 }
             },
             "materials":{
+                "text": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                      "faceCulling": {
+                        "enabled": false
+                      },
+                      "depthTesting": {
+                        "enabled": true
+                      }
+                    },
+                    "texture": "text",
+                    "sampler": "default"
+                  },
+                
                 "metal":{
                     "type": "tinted",
                     "shader": "tinted",
@@ -141,16 +156,16 @@
                         }
                     },
                     "tint": [1, 1, 1, 1],
-
+    
                     "albedo": "albedo",
                     "specular": "specular",
                     "roughness": "roughness",
                     "ambient_occlusion": "white",
                     "emissive": "black",
-
+    
                     "sampler": "default"
                 },
-
+    
                 "boat":{
                     "type": "lit",
                     "shader": "lit",
@@ -163,7 +178,7 @@
                         }
                     },
                     "tint": [1, 1, 1, 1],
-
+    
                     "albedo": "albedo",
                     "specular": "specular",
                     "roughness": "roughness",
@@ -171,7 +186,7 @@
                     "emissive": "black",
                     "sampler": "default"
                 },
-
+    
                 "missle":{
                     "type": "lit",
                     "shader": "lit",
@@ -184,7 +199,7 @@
                         }
                     },
                     "tint": [1, 1, 1, 1],
-
+    
                     "albedo": "albedo",
                     "specular": "specular",
                     "roughness": "roughness",
@@ -192,7 +207,7 @@
                     "emissive": "black",
                     "sampler": "default"
                 },
-
+    
                 "moon":{
                     "type": "textured",
                     "shader": "textured",
@@ -210,7 +225,7 @@
                 }
             }
         },
-        "world":[
+        "game":[
             {
                 "name":"camera",
                 "position": [0, 10, 65],
@@ -223,7 +238,7 @@
                     }
                 ]
             }
-
+    
             ,{
                 "name":"light",
                 "position": [0, -10, 0],
@@ -240,7 +255,7 @@
                     }
                 ]
              }
-
+    
              ,{
                 "name":"light",
                 "position": [0, -10, 0],
@@ -249,15 +264,15 @@
                     {
                         "type": "Light",
                         "lightType": 1,
-                        "attenuation": [0, 0, 1],
+                        "attenuation": [1, 1, 1],
                         "cone_angles":[10, 11],
                         "diffuse": [1,0,0],
-                        "specular": [1,0,0],
+                        "specular": [1,1,1],
                         "ambient": [0.1,0.1,0.1]
                     }
                 ]
              }
-
+    
              ,{
                 "name":"light",
                 "position": [0, 10, 0],
@@ -274,9 +289,9 @@
                     }
                 ]
              }
-
-
-
+    
+    
+    
             ,{
                 "name":"boat",
                 "scale":[0.05,0.05,0.05],
@@ -297,7 +312,7 @@
                     }
                 ]
             }
-
+    
             ,{
                 "name":"enemy",
                 "scale":[0.05,0.05,0.05],
@@ -315,7 +330,7 @@
                     { 
                         "type": "Collider"
                     }
-
+    
                 ]
             }
             ,{
@@ -333,7 +348,7 @@
                         "type":"Movement",
                         "linearVelocity":[0,0,0],
                         "angularVelocity":[0,0,0]
-
+    
                     },
                     { 
                         "type": "Collider"
@@ -354,52 +369,9 @@
                 ]
             }
         ]
-    }
-    ,
-    "menu": {
-        "assets": {
-          "shaders": {
-            "tinted": {
-              "vs": "assets/shaders/tinted.vert",
-              "fs": "assets/shaders/tinted.frag"
-            },
-            "textured": {
-              "vs": "assets/shaders/textured.vert",
-              "fs": "assets/shaders/textured.frag"
-            }
-          },
-          "textures": {
-            "text": "assets/textures/monkey.png"
-          },
-          "samplers": {
-            "default": {},
-            "pixelated": {
-              "MAG_FILTER": "GL_NEAREST"
-            }
-          },
-          "meshes":{
-            "plane": "assets/models/plane.obj"
-        },
-          "materials": {
-            "text": {
-              "type": "textured",
-              "shader": "textured",
-              "pipelineState": {
-                "faceCulling": {
-                  "enabled": false
-                },
-                "depthTesting": {
-                  "enabled": true
-                }
-              },
-              "texture": "text",
-              "sampler": "default"
-            }
-          }
-        },
-        "world": [
-          {
-            "position": [0, 0, 10],
+        ,
+        "menu": [
+        {   "position": [0, 0, 10],
             "components": [
               {
                 "type": "Camera"
@@ -409,17 +381,18 @@
               }
             ]
           },
-          {
-            "position": [0, -1, 0],
-            //"scale": [10, 10, 10],
+        {
+            "position": [0, 1, 2],
+            "scale": [10, 10, 10],
             "components": [
-              {
+            {
                 "type": "Mesh Renderer",
                 "mesh": "plane",
                 "material": "text"
-              }
+            }
             ]
-          }
+        }
         ]
-      }
-}
+    }
+    }
+      

@@ -75,7 +75,7 @@ namespace our
                 if (app->getKeyboard().isPressed(GLFW_KEY_SPACE))
                 {
                     misstat = 1;
-                    missle->linearVelocity.z = -5;
+                    missle->linearVelocity.z = -10;
                 }
 
 
@@ -93,6 +93,8 @@ namespace our
                     int randNum = rand() % (41) - 20;
                     enemy->getOwner()->localTransform.position.z = -10;
                     enemy->getOwner()->localTransform.position.x = randNum;
+                    randNum = rand() % (20) +5;
+                    enemy->linearVelocity.z=randNum;
                 }
             }
         }

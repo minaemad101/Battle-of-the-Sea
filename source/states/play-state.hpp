@@ -29,16 +29,16 @@ class Playstate : public our::State
     void onInitialize() override
     {
         // First of all, we get the scene configuration from the app config
-        auto &config = getApp()->getConfig()["game"];
+        auto &config = getApp()->getConfig()["scene"];
         // If we have assets in the scene config, we deserialize them
         if (config.contains("assets"))
         {
             our::deserializeAllAssets(config["assets"]);
         }
         // If we have a world in the scene config, we use it to populate our world
-        if (config.contains("world"))
+        if (config.contains("game"))
         {
-            world.deserialize(config["world"]);
+            world.deserialize(config["game"]);
         }
         // We initialize the camera controller system since it needs a pointer to the app
         cameraController.enter(getApp());
@@ -62,6 +62,7 @@ class Playstate : public our::State
         objsystem.update(&world, (float)deltaTime, misstat);
         if (collisionSystem.update(&world, (float)deltaTime, misstat))
         {
+            //getApp()->changeState("game");
             std::cout << "LOST!!" << std::endl;
         }
 

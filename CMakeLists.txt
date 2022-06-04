@@ -91,6 +91,7 @@ set(COMMON_SOURCES
         source/common/systems/movement.hpp
         source/common/systems/objsys.hpp
         source/common/systems/menu.hpp
+        source/common/systems/gameover.hpp
         source/common/systems/collision.hpp
 )
 
@@ -112,6 +113,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/bin)
 set(STATES_SOURCES
         source/states/play-state.hpp
         source/states/menu-state.hpp
+        source/states/gameover-state.hpp
         source/states/mesh-test-state.hpp
         source/states/transform-test-state.hpp
         source/states/pipeline-test-state.hpp
