@@ -10,8 +10,10 @@
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <iostream>
 
+
 namespace our
 {
+
 
     // The movement system is responsible for moving every entity which contains a MovementComponent.
     // This system is added as a simple example for how use the ECS framework to implement logic. 
@@ -19,7 +21,7 @@ namespace our
     class objsys {
     public:
      Application* app; 
-     
+     float tt = 0;
 void enter(Application* app){
             this->app = app;
         }
@@ -30,6 +32,12 @@ void enter(Application* app){
         //    CameraComponent* camera = nullptr;
             objmove *objm=nullptr;
             
+            std::cout<<deltaTime<<std::endl;
+
+            if(deltaTime-tt>0.15)
+            {
+                tt=deltaTime;
+            }
             for(auto entity : world->getEntities()){
                 objm = entity->getComponent<objmove>();
                 if(objm) break;
@@ -43,9 +51,6 @@ void enter(Application* app){
            
             // If there is no entity with both a CameraComponent and a FreeCameraControllerComponent, we can do nothing so we return
             
-            
-
-            std::cout<<"ay 7aga e7na gowa el moving obj"<<std::endl;
 
             if(app->getKeyboard().isPressed(GLFW_KEY_D)) entity->localTransform.position  +=  deltaTime * objm->linearVelocity;
             if(app->getKeyboard().isPressed(GLFW_KEY_A)) entity->localTransform.position -=  deltaTime * objm->linearVelocity;                    

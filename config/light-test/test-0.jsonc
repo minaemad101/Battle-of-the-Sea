@@ -34,6 +34,8 @@
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
                 "glass": "assets/textures/glass-panels.png",
+                "black":"assets/textures/black.png",
+                "white":"assets/textures/white.png",
                 "monkey": "assets/textures/monkey/albedo.jpg",
                 "monkey-specular": "assets/textures/monkey/specular.jpg",
                 "monkey-roughness": "assets/textures/monkey/roughness.jpg",
@@ -119,8 +121,8 @@
                     "albedo": "monkey",
                     "specular": "monkey-specular",
                     "roughness": "monkey-roughness",
-                    "ambient_occlusion": "monkey-ambient_occlusion",
-                    "emissive": "monkey-emissive",
+                    "ambient_occlusion": "white",
+                    "emissive": "black",
 
                     "sampler": "default"
                 },
