@@ -72,7 +72,6 @@ void enter(Application* app){
                 missle->linearVelocity.z=-5;
             }
 
-            std::cout<< enemy->getOwner()->localTransform.position.z<<std::endl;
 
             if(misstat==0)
             missle->getOwner()->localTransform.position=entity->localTransform.position;
