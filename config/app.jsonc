@@ -1,15 +1,15 @@
 {
-    "start-scene": "main",
+    "start-scene": "menu",
     "window":
     {
-        "title":"Default Game Window",
+        "title":"Battle of the sea",
         "size":{
             "width":1280,
             "height":720
         },
         "fullscreen": false
     },
-    "scene": {
+    "game": {
         "renderer":{
             "sky": "assets/textures/sky.jpg",
             "postprocess": "assets/shaders/postprocess/vignette.frag"
@@ -293,9 +293,7 @@
                         "linearVelocity": [5, 0, 0]
                     },
                     { 
-                        "type": "Collision Object", 
-                        "position": [0, 0, 0], 
-                        "length": 1
+                        "type": "Collider"
                     }
                 ]
             }
@@ -315,9 +313,7 @@
                         "linearVelocity": [0, 0, 5]
                     },
                     { 
-                        "type": "Collision Object", 
-                        "position": [0, 0, 0], 
-                        "length": 1
+                        "type": "Collider"
                     }
 
                 ]
@@ -340,9 +336,7 @@
 
                     },
                     { 
-                        "type": "Collision Object", 
-                        "position": [0, 0, 0], 
-                        "length": 1
+                        "type": "Collider"
                     }
                 ]
             }
@@ -360,5 +354,79 @@
                 ]
             }
         ]
-    }
+    },
+    "menu": {
+        "assets": {
+          "shaders": {
+            "tinted": {
+              "vs": "assets/shaders/tinted.vert",
+              "fs": "assets/shaders/tinted.frag"
+            },
+            "textured": {
+              "vs": "assets/shaders/textured.vert",
+              "fs": "assets/shaders/textured.frag"
+            }
+          },
+          "textures": {
+            "moon": "assets/textures/moon.jpg",
+            "grass": "assets/textures/grass_ground_d.jpg",
+            "wood": "assets/textures/wood.jpg",
+            "glass": "assets/textures/glass-panels.png",
+            "monkey": "assets/textures/monkey.png",
+            "text": "assets/textures/menu-state.jpg"
+          },
+          "meshes": {
+            "cube": "assets/models/cube.obj",
+            "monkey": "assets/models/monkey.obj",
+            "plane": "assets/models/plane.obj",
+            "sphere": "assets/models/sphere.obj"
+          },
+          "samplers": {
+            "default": {},
+            "pixelated": {
+              "MAG_FILTER": "GL_NEAREST"
+            }
+          },
+          "materials": {
+            "text": {
+              "type": "textured",
+              "shader": "textured",
+              "pipelineState": {
+                "faceCulling": {
+                  "enabled": false
+                },
+                "depthTesting": {
+                  "enabled": true
+                }
+              },
+              "texture": "text",
+              "sampler": "default"
+            }
+          }
+        },
+        "world": [
+          {
+            "position": [0, 0, 10],
+            "components": [
+              {
+                "type": "Camera"
+              },
+              {
+                "type": "Free Camera Controller"
+              }
+            ]
+          },
+          {
+            "position": [0, 1, 2],
+            "scale": [10, 10, 10],
+            "components": [
+              {
+                "type": "Mesh Renderer",
+                "mesh": "plane",
+                "material": "text"
+              }
+            ]
+          }
+        ]
+      }
 }

@@ -9,13 +9,10 @@ namespace our
     // This component denotes that the ColliderSystem
     // This component is added as a simple example for how use the ECS framework to implement logic.
     // For more information, see "common/systems/collision.hpp"
-    class CollisionObject : public Component
+    class ColliderComponent : public Component
     {
     public:
-        glm::vec3 position; // Each frame, the entity should have: position += length
-        float length;       // Each frame, the entity should rotate as follows: length
-
-        static std::string getID() { return "Collision Object"; }
+        static std::string getID() { return "Collider"; }
 
         void deserialize(const nlohmann::json &data) override;
     };

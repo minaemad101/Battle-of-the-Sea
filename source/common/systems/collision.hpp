@@ -1,103 +1,94 @@
 #pragma once
 
 #include "../ecs/world.hpp"
-#include "../components/collision-object.hpp"
+#include "../components/collider.hpp"
 #include "../components/movement.hpp"
 #include "../components/mesh-renderer.hpp"
+#include "../components/objmove.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 #include <iostream>
+#include <random>
 
 namespace our
 {
 
     class CollisionSystem
     {
-        std::vector<CollisionObject *> missles, enemies, boats;
+        // std::vector<CollisionObject *> missles, enemies, boats;
+        MovementComponent *missle = nullptr;
+        MovementComponent *enemy = nullptr;
+        MovementComponent *obj = nullptr;
+        objmove *objm = nullptr;
+        objmove *boat = nullptr;
 
     public:
-        bool update(World *world, float deltaTime)
+        bool update(World *world, float deltaTime, bool &misstat)
         {
-            std::cout<< "entered collision function"<<std::endl;
-            missles.clear();
-            enemies.clear();
-            boats.clear();
             for (auto entity : world->getEntities())
-                { 
-                CollisionObject *objct = entity->getComponent<CollisionObject>();
-
-                    if (objct && entity->name == "missle")
-                        missles.push_back(objct);
-                    else if (objct && entity->name == "enemy")
-                        enemies.push_back(objct);
-                    else if (objct && entity->name == "boat")
-                        boats.push_back(objct);
-                }
-
-            std::cout<< enemies.size()<<std::endl;
-
-
-
-            
-
-            for (auto missle : missles)
             {
-                for (auto enemy : enemies)
-                    if (checkCollision(missle, enemy))
-                    {
-                        
-                        MeshRendererComponent *Mesh = enemy->getOwner()->getComponent<MeshRendererComponent>();
-                        world->markForRemoval(enemy->getOwner());
-                        MovementComponent *movement = missle->getOwner()->getComponent<MovementComponent>();
-                        movement->linearVelocity = {0, 0, 0};
-                        missle->getOwner()->localTransform.position = {0, -1, -2};
-                    }
-
-                glm::vec3 missleCenter = missle->position + glm::vec3(missle->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-
-                if (missleCenter.x > 11 || missleCenter.x < -11 || missleCenter.y > 11 || missleCenter.y < -11 || missleCenter.z > 11 || missleCenter.z < -11)
+                obj = entity->getComponent<MovementComponent>();
+                objm = entity->getComponent<objmove>();
+                if (obj && entity->name == "enemy")
                 {
-                    MovementComponent *movement = missle->getOwner()->getComponent<MovementComponent>();
-                    movement->linearVelocity = {0, 0, 0};
-                    missle->getOwner()->localTransform.position = {0, -1, -2};
+                    enemy = obj;
+                }
+                else if (obj && entity->name == "missle")
+                {
+                    missle = obj;
+                }
+                else if (objm && entity->name == "boat")
+                {
+                    boat = objm;
                 }
             }
 
-            for (auto boat : boats)
+            if (checkCollision(missle, enemy))
             {
-                for (auto enemy : enemies)
-                    if (checkCollision(boat, enemy))
-                        return true;
+                int randNum = rand() % (41) - 20;
+                enemy->getOwner()->localTransform.position.z = -10;
+                enemy->getOwner()->localTransform.position.x = randNum;
+                missle->getOwner()->localTransform.position = boat->getOwner()->localTransform.position;
+                misstat = 0;
+                missle->linearVelocity.z = 0;
             }
 
-            world->deleteMarkedEntities();
+            if (checkCollision(boat, enemy))
+                return true;
 
             return false;
         }
 
-        bool checkCollision(CollisionObject *missleComponent, CollisionObject *enemyComponent)
+        bool checkCollision(MovementComponent *missleComponent, MovementComponent *enemyComponent)
         {
-            std::cout<< "entered check position "<<std::endl;
-
             auto missle = missleComponent->getOwner();
             auto enemy = enemyComponent->getOwner();
 
-            glm::vec3 missleCenter = missleComponent->position + glm::vec3(missle->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            glm::vec3 enemyCenter = enemyComponent->position + glm::vec3(enemy->getLocalToWorldMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            glm::vec3 enemyLenghts = glm::vec3(enemyComponent->length, enemyComponent->length, enemyComponent->length) * enemy->localTransform.scale;
-
+            glm::vec3 missleCenter = missle->localTransform.position;
+            glm::vec3 enemyCenter = enemy->localTransform.position;
             glm::vec3 difference = missleCenter - enemyCenter;
-            glm::vec3 clampedDifference = glm::clamp(difference, enemyLenghts * glm::vec3(-1.0f, -1.0f, -1.0f), enemyLenghts);
+            if (difference.x > -5 && difference.x < 5 && difference.z > 0 && difference.z < 2)
+                return true;
+            else
+                return false;
+        }
 
-            glm::vec3 enemyPoint = enemyCenter + clampedDifference;
+        bool checkCollision(objmove *boatComponent, MovementComponent *enemyComponent)
+        {
+            auto boat = boatComponent->getOwner();
+            auto enemy = enemyComponent->getOwner();
 
-            std::cout<<"enemy pos: "<<enemyCenter.x<<" , "<<enemyCenter.z<<" missle pos: "<<missleCenter.x<<" , "<<missleCenter.z<<std::endl;
-            difference = enemyPoint - missleCenter;
-            float missleRadius = missleComponent->length * glm::length(missle->localTransform.scale);
-            return glm::length(difference) < missleRadius;
+            glm::vec3 boatCenter = boat->localTransform.position;
+            glm::vec3 enemyCenter = enemy->localTransform.position;
+            glm::vec3 difference = boatCenter - enemyCenter;
+
+            if (difference.x > -5 && difference.x < 5 && difference.z > 0 && difference.z < 5)
+                return true;
+            else
+                return false;
         }
     };
 

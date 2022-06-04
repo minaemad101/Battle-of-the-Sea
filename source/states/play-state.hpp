@@ -21,6 +21,7 @@ class Playstate : public our::State
     our::MovementSystem movementSystem;
     our::CollisionSystem collisionSystem;
     our::objsys objsystem;
+    bool misstat = 0;
 
     // our::CarMovementSystem carMovementSystem;
     // our::DeliverSystem deliverSystem;
@@ -28,7 +29,7 @@ class Playstate : public our::State
     void onInitialize() override
     {
         // First of all, we get the scene configuration from the app config
-        auto &config = getApp()->getConfig()["scene"];
+        auto &config = getApp()->getConfig()["game"];
         // If we have assets in the scene config, we deserialize them
         if (config.contains("assets"))
         {
@@ -57,8 +58,11 @@ class Playstate : public our::State
         // deliverSystem.update(&world,(float)deltaTime);
         // And finally we use the renderer system to draw the scene
 
-        objsystem.update(&world, (float)deltaTime);
-        collisionSystem.update(&world, (float)deltaTime);
+        objsystem.update(&world, (float)deltaTime, misstat);
+        if (collisionSystem.update(&world, (float)deltaTime, misstat))
+        {
+            std::cout << "LOST!!" << std::endl;
+        }
 
         renderer.render(&world);
     }

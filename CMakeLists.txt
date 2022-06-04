@@ -81,8 +81,8 @@ set(COMMON_SOURCES
         source/common/components/movement.cpp
         source/common/components/objmove.cpp
         source/common/components/objmove.hpp
-        source/common/components/collision-object.cpp
-        source/common/components/collision-object.hpp
+        source/common/components/collider.cpp
+        source/common/components/collider.hpp
         source/common/components/component-deserializer.hpp
 
         source/common/systems/forward-renderer.hpp
@@ -90,6 +90,7 @@ set(COMMON_SOURCES
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
         source/common/systems/objsys.hpp
+        source/common/systems/menu.hpp
         source/common/systems/collision.hpp
 )
 
@@ -110,6 +111,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/bin)
 
 set(STATES_SOURCES
         source/states/play-state.hpp
+        source/states/menu-state.hpp
         source/states/mesh-test-state.hpp
         source/states/transform-test-state.hpp
         source/states/pipeline-test-state.hpp
