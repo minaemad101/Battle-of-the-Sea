@@ -354,7 +354,8 @@
                 ]
             }
         ]
-    },
+    }
+    ,
     "menu": {
         "assets": {
           "shaders": {
@@ -368,18 +369,7 @@
             }
           },
           "textures": {
-            "moon": "assets/textures/moon.jpg",
-            "grass": "assets/textures/grass_ground_d.jpg",
-            "wood": "assets/textures/wood.jpg",
-            "glass": "assets/textures/glass-panels.png",
-            "monkey": "assets/textures/monkey.png",
-            "text": "assets/textures/menu-state.jpg"
-          },
-          "meshes": {
-            "cube": "assets/models/cube.obj",
-            "monkey": "assets/models/monkey.obj",
-            "plane": "assets/models/plane.obj",
-            "sphere": "assets/models/sphere.obj"
+            "text": "assets/textures/monkey.png"
           },
           "samplers": {
             "default": {},
@@ -387,6 +377,9 @@
               "MAG_FILTER": "GL_NEAREST"
             }
           },
+          "meshes":{
+            "plane": "assets/models/plane.obj"
+        },
           "materials": {
             "text": {
               "type": "textured",
@@ -417,8 +410,8 @@
             ]
           },
           {
-            "position": [0, 1, 2],
-            "scale": [10, 10, 10],
+            "position": [0, -1, 0],
+            //"scale": [10, 10, 10],
             "components": [
               {
                 "type": "Mesh Renderer",

@@ -2,7 +2,7 @@
 
 #include <application.hpp>
 #include <systems/menu.hpp>
-
+#include "../common/components/mesh-renderer.hpp"
 #include <asset-loader.hpp>
 
 class Menustate : public our::State
@@ -19,12 +19,19 @@ class Menustate : public our::State
         if (config.contains("assets"))
             our::deserializeAllAssets(config["assets"]);
 
+            
+
         if (config.contains("world"))
-            world.deserialize(config["world"]);
+            world.deserialize(config["world"]);            
+
+        menuSystem.enter(getApp());
     }
 
     void onDraw(double deltaTime) override
     {
+
+        renderer.render(&world);
+
         if (menuSystem.update(&world, (float)deltaTime))
         {
             getApp()->changeState("game");
@@ -33,7 +40,6 @@ class Menustate : public our::State
 
     void onDestroy() override
     {
-
         our::clearAllAssets();
     }
 };

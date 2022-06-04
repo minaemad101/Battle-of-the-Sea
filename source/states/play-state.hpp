@@ -3,13 +3,12 @@
 #include <application.hpp>
 #include "../source/common/systems/objsys.hpp"
 #include "../source/common/systems/collision.hpp"
+#include "../source/common/systems/menu.hpp"
 #include <ecs/world.hpp>
 #include <systems/forward-renderer.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 #include <asset-loader.hpp>
-// #include <systems/car-movement.hpp>
-// #include <systems/deliver.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State
@@ -21,6 +20,7 @@ class Playstate : public our::State
     our::MovementSystem movementSystem;
     our::CollisionSystem collisionSystem;
     our::objsys objsystem;
+    our::MenuSystem menusystem;
     bool misstat = 0;
 
     // our::CarMovementSystem carMovementSystem;
@@ -44,6 +44,7 @@ class Playstate : public our::State
         cameraController.enter(getApp());
         // Then we initialize the renderer
         objsystem.enter(getApp());
+        menusystem.enter(getApp());
 
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
