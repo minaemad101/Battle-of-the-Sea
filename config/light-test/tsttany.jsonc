@@ -11,8 +11,8 @@
     "scene": {
         "renderer":{
             "sky": "assets/textures/sky.jpg",
-            "postprocess": "assets/shaders/postprocess/fog.frag"
-            //"posteprocess":"assets/shaders/postprocess/radial-blur.frag"
+
+            "posteprocess":"assets/shaders/postprocess/radial-blur.frag"
         },
         "assets":{
             "shaders":{

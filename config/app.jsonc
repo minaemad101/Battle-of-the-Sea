@@ -11,7 +11,7 @@
     "scene": {
         "renderer":{
             "sky": "assets/textures/sky.jpg",
-            "postprocess": "assets/shaders/postprocess/fog.frag"
+            "postprocess": "assets/shaders/postprocess/sea-breeze.frag"
             //"posteprocess":"assets/shaders/postprocess/radial-blur.frag"
         },
         "assets":{
@@ -334,14 +334,11 @@
             "components": [
               {
                 "type": "Camera"
-              },
-              {
-                "type": "Free Camera Controller"
               }
             ]
           },
         {   "position": [0, 1, 2],
-            "scale": [10, 10, 10],
+            "scale": [20, 9, 10],
             "components": [
             {
                 "type": "Mesh Renderer",
@@ -357,15 +354,12 @@
             "components": [
               {
                 "type": "Camera"
-              },
-              {
-                "type": "Free Camera Controller"
               }
             ]
         },
         {
-            "position": [0, 1, 2],
-            "scale": [10, 10, 10],
+            "position": [0, 0, 2],
+            "scale": [15, 8, 10],
             "components": [
             {
                 "type": "Mesh Renderer",
