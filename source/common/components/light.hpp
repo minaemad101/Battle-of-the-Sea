@@ -18,10 +18,10 @@ namespace our {
         glm::vec2 cone_angles = {0,0}; // x: inner_angle, y: outer_angle
         glm::vec3 ambient = {0,0,0};
         
-        // The ID of this component type is "Camera"
+        // The ID of this component type is "Light"
         static std::string getID() { return "Light"; }
 
-        // Reads camera parameters from the given json object
+        // Reads Light parameters from the given json object
         void deserialize(const nlohmann::json& data) override;
     };
 

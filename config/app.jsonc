@@ -153,7 +153,7 @@
                     },
                     "tint": [1, 1, 1, 1],
     
-                    "albedo": "albedo",
+                    "albedo": "boat",
                     "specular": "specular",
                     "roughness": "roughness",
                     "ambient_occlusion": "white",
@@ -174,7 +174,7 @@
                     },
                     "tint": [1, 1, 1, 1],
     
-                    "albedo": "albedo",
+                    "albedo": "missle",
                     "specular": "specular",
                     "roughness": "roughness",
                     "ambient_occlusion": "white",
