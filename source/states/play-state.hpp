@@ -1,18 +1,19 @@
 #pragma once
 
 #include <application.hpp>
-#include "../source/common/systems/objsys.hpp"
-#include "../source/common/systems/collision.hpp"
-#include "../source/common/systems/menu.hpp"
 #include <ecs/world.hpp>
 #include <systems/forward-renderer.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 #include <asset-loader.hpp>
-
+#include <systems/objsys.hpp>
+#include <systems/collision.hpp>
+#include <systems/menu.hpp>
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State
 {
+    public:
+        bool overstate =0;
 
     our::World world;
     our::ForwardRenderer renderer;
@@ -22,9 +23,6 @@ class Playstate : public our::State
     our::objsys objsystem;
     our::MenuSystem menusystem;
     bool misstat = 0;
-
-    // our::CarMovementSystem carMovementSystem;
-    // our::DeliverSystem deliverSystem;
 
     void onInitialize() override
     {
@@ -60,9 +58,10 @@ class Playstate : public our::State
         // And finally we use the renderer system to draw the scene
 
         objsystem.update(&world, (float)deltaTime, misstat);
-        if (collisionSystem.update(&world, (float)deltaTime, misstat))
+                if (collisionSystem.update(&world, (float)deltaTime, misstat))
         {
             //getApp()->changeState("game");
+            overstate =1;
             std::cout << "LOST!!" << std::endl;
         }
 

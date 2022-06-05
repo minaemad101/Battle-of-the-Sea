@@ -23,6 +23,7 @@
 #endif
 
 #include "texture/screenshot.hpp"
+#include "../states/play-state.hpp"
 
 std::string default_screenshot_filepath() {
     std::stringstream stream;
@@ -273,7 +274,11 @@ int our::Application::run(int run_for_frames) {
         }
         if (currentState==states["game"])
         {
-            std::cout<<"in the game state"<<std::endl;
+
+            Playstate *ps=dynamic_cast<Playstate*>(currentState);
+            std::cout<<"overstate: "<<ps->overstate<<std::endl;
+            if(ps->overstate)
+            this->changeState("gameover");
         }
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
         if(currentState) currentState->onDraw(current_frame_time - last_frame_time);
