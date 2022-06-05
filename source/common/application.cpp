@@ -266,10 +266,14 @@ int our::Application::run(int run_for_frames) {
 
         // Get the current time (the time at which we are starting the current frame).
         double current_frame_time = glfwGetTime();
-         if (keyboard.justPressed(GLFW_KEY_ENTER) && !enter_pressed)
+         if (keyboard.justPressed(GLFW_KEY_SPACE) && !enter_pressed)
         {
             enter_pressed = true;
             this->changeState("game");
+        }
+        if (currentState==states["game"])
+        {
+            std::cout<<"in the game state"<<std::endl;
         }
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
         if(currentState) currentState->onDraw(current_frame_time - last_frame_time);
