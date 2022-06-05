@@ -18,7 +18,6 @@ namespace our {
             skyShader->attach("assets/shaders/textured.vert", GL_VERTEX_SHADER);
             skyShader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
             skyShader->link();
-            //not done
             //TODO: (Req 9) Pick the correct pipeline state to draw the sky
             // Hints: the sky will be draw after the opaque objects so we would need depth testing but which depth funtion should we pick?
             // We will draw the sphere from the inside, so what options should we pick for the face culling.
@@ -71,17 +70,6 @@ namespace our {
 
             glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(), 0);
             glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTarget->getOpenGLName(), 0);
-
-            // GLuint mip_levels = glm::floor(glm::log2(glm::max<float>(windowSize[0], windowSize[1]))) + 1;
-            // glTexStorage2D(GL_TEXTURE_2D, mip_levels, GL_RGBA8, windowSize[0], windowSize[1]);
-            // //create depth
-            
-            // GLuint dbs;
-            // glGenTextures(1, &dbs);
-            // glBindTexture(GL_TEXTURE_2D, dbs);
-            // glTexStorage2D(GL_TEXTURE_2D, 1, GL_DEPTH_COMPONENT32, windowSize[0], windowSize[1]);
-            // glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colored, 0);   
-            // glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, dbs, 0);
 
             //TODO: (Req 10) Unbind the framebuffer just to be safe
             // to unbind pass 0 to  glBindFramebuffer
