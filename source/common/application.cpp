@@ -238,8 +238,6 @@ int our::Application::run(int run_for_frames) {
     double last_frame_time = glfwGetTime();
     int current_frame = 0;
 
-    bool enter_pressed =0;
-
     //Game loop
     while(!glfwWindowShouldClose(window)){
         if(run_for_frames != 0 && current_frame >= run_for_frames) break;
@@ -267,18 +265,23 @@ int our::Application::run(int run_for_frames) {
 
         // Get the current time (the time at which we are starting the current frame).
         double current_frame_time = glfwGetTime();
-         if (keyboard.justPressed(GLFW_KEY_SPACE) && !enter_pressed)
+         if (currentState==states["menu"] && keyboard.justPressed(GLFW_KEY_SPACE))
         {
-            enter_pressed = true;
-            this->changeState("game");
+            nextState=states["game"];
+            //this->changeState("game");
         }
         if (currentState==states["game"])
         {
-
             Playstate *ps=dynamic_cast<Playstate*>(currentState);
-            std::cout<<"overstate: "<<ps->overstate<<std::endl;
             if(ps->overstate)
-            this->changeState("gameover");
+            nextState=states["gameover"];
+            //this->changeState("gameover");
+        }
+        if (currentState==states["gameover"] && keyboard.justPressed(GLFW_KEY_SPACE))
+        {
+            std::cout<<"i want to go to menu"<<std::endl;
+            nextState=states["menu"];
+            //this->changeState("menu");
         }
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
         if(currentState) currentState->onDraw(current_frame_time - last_frame_time);

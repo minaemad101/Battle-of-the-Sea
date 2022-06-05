@@ -1,5 +1,5 @@
 {
-    "start-scene": "main",
+    "start-scene": "game",
     "window":
     {
         "title":"Default Game Window",
@@ -210,7 +210,7 @@
                 }
             }
         },
-        "world":[
+        "game":[
             {
                 "position": [0, 0, 10],
                 "components": [

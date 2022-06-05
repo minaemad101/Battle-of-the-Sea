@@ -1,7 +1,7 @@
 {
     "start-scene": "menu",
     "window": {
-        "title": "FARBEN",
+        "title": "Battle Of The Sea",
         "size": {
         "width": 1600,
         "height": 900
@@ -30,9 +30,6 @@
             },
             "textures":{
                 "moon": "assets/textures/moon.jpg",
-                "grass": "assets/textures/grass_ground_d.jpg",
-                "wood": "assets/textures/wood.jpg",
-                "glass": "assets/textures/glass-panels.png",
                 "sea": "assets/textures/sea.png",
                 
                 "black":"assets/textures/black.png",
@@ -47,13 +44,14 @@
                 "roughness": "assets/textures/monkey/roughness.jpg",
                 "ambient_occlusion": "assets/textures/monkey/ambient_occlusion.jpg",
                 "emissive": "assets/textures/monkey/emissive.jpg",
-                "text":"assets/textures/menu-state.jpg"
+                
+                "menu":"assets/textures/menu-state.jpg",
+                "gameover":"assets/textures/gameover.jpg"
             },
             "meshes":{
-                "cube": "assets/models/cube.obj",
                 "monkey": "assets/models/Suzanne.obj",
                 "plane": "assets/models/plane.obj",
-                "sphere": "assets/models/sphere.obj",
+                
                 "boat":"assets/models/boat.obj",
                 "missle":"assets/models/missle.obj"           
             },
@@ -64,33 +62,29 @@
                 }
             },
             "materials":{
-                "text": {
+                "menu": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                      "faceCulling": {
-                        "enabled": false
-                      },
-                      "depthTesting": {
-                        "enabled": true
-                      }
+                        "faceCulling": {
+                            "enabled": false},
+                        "depthTesting": {
+                            "enabled": true}
                     },
-                    "texture": "text",
+                    "texture": "menu",
                     "sampler": "default"
-                  },
-                
-                "metal":{
-                    "type": "tinted",
-                    "shader": "tinted",
+                },
+                "gameover": {
+                    "type": "textured",
+                    "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                        "faceCulling": {
+                            "enabled": false},
+                        "depthTesting": {
+                            "enabled": true}
                     },
-                    "tint": [0.45, 0.4, 0.5, 1]
+                    "texture": "gameover",
+                    "sampler": "default"
                 },
                 "glass":{
                     "type": "textured",
@@ -114,46 +108,27 @@
                     "texture": "glass",
                     "sampler": "pixelated"
                 },
-                "grass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "grass",
-                    "sampler": "default"
-                },
                 "sea":{
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
                         "faceCulling":{
-                            "enabled": false
-                        },
+                            "enabled": false},
                         "depthTesting":{
-                            "enabled": true
-                        }
+                            "enabled": true}
                     },
                     "tint": [1, 1, 1, 1],
                     "texture": "sea",
                     "sampler": "default"
                 },
-                "monkey":{
+                "monkey-lit":{
                     "type": "lit",
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling":{
-                            "enabled": false
-                        },
+                            "enabled": false},
                         "depthTesting":{
-                            "enabled": true
-                        }
+                            "enabled": true}
                     },
                     "tint": [1, 1, 1, 1],
     
@@ -171,11 +146,9 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling":{
-                            "enabled": false
-                        },
+                            "enabled": false},
                         "depthTesting":{
-                            "enabled": true
-                        }
+                            "enabled": true}
                     },
                     "tint": [1, 1, 1, 1],
     
@@ -206,28 +179,11 @@
                     "ambient_occlusion": "white",
                     "emissive": "black",
                     "sampler": "default"
-                },
-    
-                "moon":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "moon",
-                    "sampler": "default"
                 }
             }
         },
         "game":[
-            {
-                "name":"camera",
+            {   "name":"camera",
                 "position": [0, 10, 65],
                 "components": [
                     {
@@ -238,62 +194,68 @@
                     }
                 ]
             }
-    
-            ,{
-                "name":"light",
-                "position": [0, -10, 0],
-                "rotation": [0, 180, 180],
+            ,{  "name":"light",
+                "position": [0, 10, 45],
+                "rotation": [0, 0, 0],
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": 2,
+                        "attenuation": [0, 0.2, 0],
+                        "cone_angles":[0, 40],
+                        "diffuse": [0,0,1],
+                        "specular": [0,0,1],
+                        "ambient": [0,0,0]
+                    }
+                ]
+            }
+            ,{  "name":"light",
+                "position": [20, 10, 45],
+                "rotation": [0, 0, 0],
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": 2,
+                        "attenuation": [0, 0.2, 0],
+                        "cone_angles":[0, 40],
+                        "diffuse": [0,1,0],
+                        "specular": [0,1,0],
+                        "ambient": [0,0,0]
+                    }
+                ]
+            }
+            ,{  "name":"light",
+                "position": [-20, 10, 45],
+                "rotation": [0, 0, 0],
                 "components": [
                     {
                         "type": "Light",
                         "lightType": 1,
-                        "attenuation": [0, 0, 1],
-                        "cone_angles":[10, 11],
+                        "attenuation": [0, 0.2, 0.2],
+                        "cone_angles":[0, 40],
                         "diffuse": [1,0,0],
                         "specular": [1,0,0],
-                        "ambient": [0.1,0.1,0.1]
+                        "ambient": [0,0,0]
                     }
                 ]
-             }
-    
-             ,{
-                "name":"light",
-                "position": [0, -10, 0],
-                "rotation": [0, 180, 180],
-                "components": [
-                    {
-                        "type": "Light",
-                        "lightType": 1,
-                        "attenuation": [1, 1, 1],
-                        "cone_angles":[10, 11],
-                        "diffuse": [1,0,0],
-                        "specular": [1,1,1],
-                        "ambient": [0.1,0.1,0.1]
-                    }
-                ]
-             }
-    
-             ,{
-                "name":"light",
-                "position": [0, 10, 0],
+            }
+
+            ,{  "name":"light",
+                "position": [-20, 10, 45],
                 "rotation": [0, 0, 0],
                 "components": [
                     {
                         "type": "Light",
                         "lightType": 0,
-                        "attenuation": [0, 0, 1],
-                        "cone_angles":[10, 11],
-                        "diffuse": [1,0,0],
-                        "specular": [1,0,0],
+                        "attenuation": [0.1, 0.1, 0.1],
+                        "cone_angles":[0, 40],
+                        "diffuse": [0.5,0.5,0.5],
+                        "specular": [0.5,0.5,0.5],
                         "ambient": [0.1,0.1,0.1]
                     }
                 ]
-             }
-    
-    
-    
-            ,{
-                "name":"boat",
+            }
+            ,{  "name":"boat",
                 "scale":[0.05,0.05,0.05],
                 "position":[0,-1,45],
                 "rotation":[0,180,0],
@@ -305,16 +267,14 @@
                     },
                     {
                         "type": "objmove",
-                        "linearVelocity": [5, 0, 0]
+                        "linearVelocity": [10, 0, 0]
                     },
                     { 
                         "type": "Collider"
                     }
                 ]
             }
-    
-            ,{
-                "name":"enemy",
+            ,{  "name":"enemy",
                 "scale":[0.05,0.05,0.05],
                 "position":[0,-1,-5],
                 "components": [
@@ -333,9 +293,8 @@
     
                 ]
             }
-            ,{
-                "name":"missle",
-                "rotation": [0, 0, 0],
+            ,{  "name":"missle",
+                "rotation": [0, 180, 0],
                 "position":[0,-1,45],
                 "scale":[2,2,2],
                 "components": [
@@ -355,8 +314,7 @@
                     }
                 ]
             }
-            ,{
-                "name":"plane",
+            ,{  "name":"plane",
                 "position": [0, -1, 0],
                 "rotation": [-90, 0, 0],
                 "scale": [25, 50, 1],
@@ -381,6 +339,29 @@
               }
             ]
           },
+        {   "position": [0, 1, 2],
+            "scale": [10, 10, 10],
+            "components": [
+            {
+                "type": "Mesh Renderer",
+                "mesh": "plane",
+                "material": "menu"
+            }
+            ]
+        }
+        ]
+        ,
+        "gameover": [
+        {   "position": [0, 0, 10],
+            "components": [
+              {
+                "type": "Camera"
+              },
+              {
+                "type": "Free Camera Controller"
+              }
+            ]
+        },
         {
             "position": [0, 1, 2],
             "scale": [10, 10, 10],
@@ -388,7 +369,7 @@
             {
                 "type": "Mesh Renderer",
                 "mesh": "plane",
-                "material": "text"
+                "material": "gameover"
             }
             ]
         }
