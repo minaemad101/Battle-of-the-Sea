@@ -9,6 +9,14 @@
 #include <systems/objsys.hpp>
 #include <systems/collision.hpp>
 #include <systems/menu.hpp>
+
+#include <windows.h>
+#include <Mmsystem.h>
+#include <mciapi.h>
+//these two headers are already included in the <Windows.h> header
+#pragma comment(lib, "Winmm.lib")
+typedef unsigned int MMVERSION;
+
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State
 {
@@ -23,9 +31,11 @@ class Playstate : public our::State
     our::objsys objsystem;
     our::MenuSystem menusystem;
     bool misstat = 0;
+    
 
     void onInitialize() override
     {
+
         // First of all, we get the scene configuration from the app config
         auto &config = getApp()->getConfig()["scene"];
         // If we have assets in the scene config, we deserialize them
@@ -44,6 +54,9 @@ class Playstate : public our::State
         objsystem.enter(getApp());
         menusystem.enter(getApp());
 
+        mciSendString("open \"assets\\theme\\Caribbean.mp3\" type mpegvideo alias mp3 ", NULL, 0, NULL);
+        mciSendString("play mp3 repeat", NULL, 0, NULL);
+        
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
     }
@@ -53,9 +66,7 @@ class Playstate : public our::State
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
-        // carMovementSystem.update(&world,(float)deltaTime);
-        // deliverSystem.update(&world,(float)deltaTime);
-        // And finally we use the renderer system to draw the scene
+        
 
         objsystem.update(&world, (float)deltaTime, misstat);
                 if (collisionSystem.update(&world, (float)deltaTime, misstat))

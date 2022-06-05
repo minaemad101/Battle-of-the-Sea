@@ -13,8 +13,8 @@ namespace our {
         } else {
             cameraType = CameraType::PERSPECTIVE;
         }
-        near = data.value("near", 0.01f);
-        far = data.value("far", 100.0f);
+        neare = data.value("near", 0.01f);
+        fare = data.value("far", 100.0f);
         fovY = data.value("fovY", 90.0f) * (glm::pi<float>() / 180);
         orthoHeight = data.value("orthoHeight", 1.0f);
     }
@@ -62,12 +62,12 @@ namespace our {
            
         float aspect_ratio = static_cast<float>(viewportSize.x) / viewportSize.y;     
         // pasing the parameters to the function  orthoprojection , perspectiveprojection
-        glm::mat4 orthoprojection = glm::ortho(-(orthoHeight / 2) * aspect_ratio, (orthoHeight / 2) * aspect_ratio, -orthoHeight/2, orthoHeight/2, near, far);
+        glm::mat4 orthoprojection = glm::ortho(-(orthoHeight / 2) * aspect_ratio, (orthoHeight / 2) * aspect_ratio, -orthoHeight/2, orthoHeight/2, neare, fare);
          glm::mat4 perspectiveprojection = glm::perspective(
             fovY,
             aspect_ratio,
-            near,
-            far
+            neare,
+            fare
         );
 //select one of the 2 projections according to camera type
       if(cameraType == CameraType::ORTHOGRAPHIC){

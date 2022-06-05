@@ -196,7 +196,7 @@ namespace our {
             material->setup();
             material->shader->set("transform", VP * opaqueCommands[i].localToWorld);
             //! LIGHT
-          
+            
             material->shader->set("light_count",int(lights.size()));
             std::string uni ="";
             for(int j=0;j< lights.size();j++){

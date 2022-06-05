@@ -16,6 +16,11 @@ class Gameoverstate : public our::State
 
     void onInitialize() override
     {
+
+        mciSendString("close mp3", NULL, 0, NULL);
+        mciSendString("open \"assets\\theme\\endgame.mp3\" type mpegvideo alias mp3 ", NULL, 0, NULL);
+        mciSendString("play mp3 repeat", NULL, 0, NULL);
+        
         auto &config = getApp()->getConfig()["scene"];
 
         if (config.contains("assets"))
@@ -42,6 +47,7 @@ class Gameoverstate : public our::State
 
     void onDestroy() override
     {
+        mciSendString("close mp3", NULL, 0, NULL);
         our::clearAllAssets();
     }
 };
