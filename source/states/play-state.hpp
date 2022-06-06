@@ -86,6 +86,7 @@ class Playstate : public our::State
         // On exit, we call exit for the camera controller system to make sure that the mouse is unlocked
         cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
+        world.clear();
         our::clearAllAssets();
     }
 };

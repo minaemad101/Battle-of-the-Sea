@@ -50,6 +50,7 @@ class Menustate : public our::State
 
     void onDestroy() override
     {
+        world.clear();
         our::clearAllAssets();
     }
 };

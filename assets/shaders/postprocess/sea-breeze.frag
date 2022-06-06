@@ -25,5 +25,5 @@ void main(){
     colr.g = texture(tex,vec2(tex_coord.x,tex_coord.y)).g;
     colr.b = texture(tex,vec2(tex_coord.x ,tex_coord.y)).b;
 
-    frag_color = vec4(colr.r, colr.g, colr.b, 1.0)+vec4(0.05,0.09,0.2,0);
+    frag_color = vec4(colr.r, colr.g, colr.b, 1.0)+vec4(0.1,0.2,0.5,0);
 }

@@ -48,6 +48,7 @@ class Gameoverstate : public our::State
     void onDestroy() override
     {
         mciSendString("close mp3", NULL, 0, NULL);
+        world.clear();
         our::clearAllAssets();
     }
 };
