@@ -12,6 +12,9 @@
 
 #include <flags/flags.h>
 
+
+
+
 // Include the Dear ImGui implementation headers
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD2
 #include <imgui_impl/imgui_impl_glfw.h>
@@ -22,7 +25,8 @@
 #define ENABLE_OPENGL_DEBUG_MESSAGES
 #endif
 
-#include "texture/screenshot.h"
+#include "texture/screenshot.hpp"
+#include "../states/play-state.hpp"
 
 std::string default_screenshot_filepath() {
     std::stringstream stream;
@@ -264,7 +268,23 @@ int our::Application::run(int run_for_frames) {
 
         // Get the current time (the time at which we are starting the current frame).
         double current_frame_time = glfwGetTime();
-
+         if (currentState==states["menu"] && keyboard.justPressed(GLFW_KEY_SPACE))
+        {
+            nextState=states["game"];
+        }
+        if (currentState==states["game"])
+        {
+            Playstate *ps=dynamic_cast<Playstate*>(currentState);
+            if(ps->overstate)
+            nextState=states["gameover"];
+            //this->changeState("gameover");
+        }
+        if (currentState==states["gameover"] && keyboard.justPressed(GLFW_KEY_SPACE))
+        {
+            std::cout<<"i want to go to menu"<<std::endl;
+            nextState=states["menu"];
+            //this->changeState("menu");
+        }
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
         if(currentState) currentState->onDraw(current_frame_time - last_frame_time);
         last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
